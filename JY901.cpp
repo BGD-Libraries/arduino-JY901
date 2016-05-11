@@ -127,13 +127,13 @@ double CJY901::getAcc(const char* str)
 		readRegisters(_address, JY_AX, 8, (int8_t *)&JY901_data.acc);
 
 	if (strcmp(str, "x") == 0 || strcmp(str, "X") == 0)		//x
-		return JY901_data.acc.x / 32768.0*16.0;
+		return JY901_data.acc.x / (32768.0/16.0);
 
 	if (strcmp(str, "y") == 0 || strcmp(str, "Y") == 0)		//y
-		return JY901_data.acc.y / 32768.0*16.0;
+		return JY901_data.acc.y / (32768.0/16.0);
 
 	if (strcmp(str, "z") == 0 || strcmp(str, "Z") == 0)		//z
-		return JY901_data.acc.z / 32768.0*16.0;
+		return JY901_data.acc.z / (32768.0/16.0);
 
 	if (strcmp(str, "t") == 0 || strcmp(str, "T") == 0)		//温度
 		return JY901_data.acc.temperature / 340.0 + 36.53;
@@ -145,13 +145,13 @@ double CJY901::getGyro(const char* str)
 		readRegisters(_address, JY_GX, 8, (int8_t *)&JY901_data.gyro);
 
 	if (strcmp(str, "x") == 0 || strcmp(str, "X") == 0)		//x
-		return JY901_data.gyro.x / 32768.0*2000.0;
+		return JY901_data.gyro.x / (32768.0/2000.0);
 
 	if (strcmp(str, "y") == 0 || strcmp(str, "Y") == 0)		//y
-		return JY901_data.gyro.y / 32768.0*2000.0;
+		return JY901_data.gyro.y / (32768.0/2000.0);
 
 	if (strcmp(str, "z") == 0 || strcmp(str, "Z") == 0)		//z
-		return JY901_data.gyro.z / 32768.0*2000.0;
+		return JY901_data.gyro.z / (32768.0/2000.0);
 
 	if (strcmp(str, "t") == 0 || strcmp(str, "T") == 0)		//温度
 		return JY901_data.gyro.temperature / 340.0 + 36.53;
@@ -163,13 +163,13 @@ double CJY901::getAngle(const char* str)
 		readRegisters(_address, JY_Roll, 8, (int8_t *)&JY901_data.angle);
 
 	if (strcmp(str, "x") == 0 || strcmp(str, "X") == 0)		//x
-		return JY901_data.angle.x / 32768.0*180.0;
+		return JY901_data.angle.x / (32768.0/180.0);
 
 	if (strcmp(str, "y") == 0 || strcmp(str, "Y") == 0)		//y
-		return JY901_data.angle.y / 32768.0*180.0;
+		return JY901_data.angle.y / (32768.0/180.0);
 
 	if (strcmp(str, "z") == 0 || strcmp(str, "Z") == 0)		//z
-		return JY901_data.angle.z / 32768.0*180.0;
+		return JY901_data.angle.z / (32768.0/180.0);
 
 	if (strcmp(str, "t") == 0 || strcmp(str, "T") == 0)		//温度
 		return JY901_data.angle.temperature / 340.0 + 36.53;
@@ -181,13 +181,13 @@ double CJY901::getMag(const char* str)
 		readRegisters(_address, JY_HX, 8, (int8_t *)&JY901_data.mag);
 
 	if (strcmp(str, "x") == 0 || strcmp(str, "X") == 0)		//x
-		return JY901_data.mag.x / 32768.0*180.0;
+		return JY901_data.mag.x / (32768.0/180.0);
 
 	if (strcmp(str, "y") == 0 || strcmp(str, "Y") == 0)		//y
-		return JY901_data.mag.y / 32768.0*180.0;
+		return JY901_data.mag.y / (32768.0/180.0);
 
 	if (strcmp(str, "z") == 0 || strcmp(str, "Z") == 0)		//z
-		return JY901_data.mag.z / 32768.0*180.0;
+		return JY901_data.mag.z / (32768.0/180.0);
 
 	if (strcmp(str, "t") == 0 || strcmp(str, "T") == 0)		//温度
 		return JY901_data.mag.temperature / 340.0 + 36.53;
