@@ -20,8 +20,6 @@ void CJY901::startIIC(uint8_t address)
 
 bool CJY901::copeSerialData(uint8_t data)
 {
-	static uint8_t rxBuffer[12];
-	static uint8_t rxCnt = 0;
 	rxBuffer[rxCnt] = data;
 	rxCnt++;
 	if (rxBuffer[0] != 0x55) {

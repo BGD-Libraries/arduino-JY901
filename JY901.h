@@ -29,6 +29,8 @@ class CJY901
   private: 
 	uint8_t _address;
 	bool    _transferMode;
+	uint8_t rxBuffer[12];
+	uint8_t rxCnt = 0;
 	void readRegisters(uint8_t deviceAddr,uint8_t addressToRead, uint8_t bytesToRead, int8_t * dest);
 	void writeRegister(uint8_t deviceAddr,uint8_t addressToWrite,uint8_t bytesToRead, int8_t *dataToWrite);
 	struct
