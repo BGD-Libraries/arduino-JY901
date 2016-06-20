@@ -267,5 +267,36 @@ double CJY901::getGPSV(void)	//km/h
 	return JY901_data.GPSVelocity / 1000.0;
 }
 
+void CJY901::saveConf(void)
+{
+	int8_t cmd[2] = {0x00,0x00};
+	if (_transferMode) {
+		writeRegister(_address, JY_SAVE, 2, cmd);
+	}
+}
+
+void CJY901::quitCali(void)
+{
+	int8_t cmd[2] = {0x00,0x00};
+	if (_transferMode) {
+		writeRegister(_address, JY_CALSW, 2, cmd);
+	}
+}
+
+void CJY901::caliIMU(void)
+{
+	int8_t cmd[2] = {0x01,0x00};
+	if (_transferMode) {
+		writeRegister(_address, JY_CALSW, 2, cmd);
+	}
+}
+
+void CJY901::caliMag(void)
+{
+	int8_t cmd[2] = {0x02,0x00};
+	if (_transferMode) {
+		writeRegister(_address, JY_CALSW, 2, cmd);
+	}
+}
 
 CJY901 JY901 = CJY901();
