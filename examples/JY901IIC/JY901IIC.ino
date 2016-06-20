@@ -8,7 +8,8 @@ SCL <---> SCL
 */
 void setup() 
 {
-	JY901.StartIIC();
+	Serial.begin(115200);
+	JY901.startIIC();
 } 
 
 void loop() 
