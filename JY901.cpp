@@ -60,6 +60,7 @@ bool CJY901::copeSerialData(uint8_t data)
 		            break;
 	}
 	rxCnt = 0;
+	lastTime = millis();
 	return 1;
 }
 
@@ -297,6 +298,66 @@ void CJY901::caliMag(void)
 	if (_transferMode) {
 		writeRegister(_address, JY_CALSW, 2, cmd);
 	}
+}
+
+
+int16_t CJY901::getAccRaw(const char* str)
+{
+	if (_transferMode)
+		readRegisters(_address, JY_AX, 8, (int8_t *)&JY901_data.acc);
+
+	if (strcmp(str, "x") == 0 || strcmp(str, "X") == 0)     //x
+		return JY901_data.acc.x;
+
+	if (strcmp(str, "y") == 0 || strcmp(str, "Y") == 0)     //y
+		return JY901_data.acc.y;
+
+	if (strcmp(str, "z") == 0 || strcmp(str, "Z") == 0)     //z
+		return JY901_data.acc.z;
+
+	if (strcmp(str, "t") == 0 || strcmp(str, "T") == 0)     //温度
+		return JY901_data.acc.temperature;
+}
+
+int16_t CJY901::getGyroRaw(const char* str)
+{
+	if (_transferMode)
+		readRegisters(_address, JY_GX, 8, (int8_t *)&JY901_data.gyro);
+
+	if (strcmp(str, "x") == 0 || strcmp(str, "X") == 0)     //x
+		return JY901_data.gyro.x;
+
+	if (strcmp(str, "y") == 0 || strcmp(str, "Y") == 0)     //y
+		return JY901_data.gyro.y;
+
+	if (strcmp(str, "z") == 0 || strcmp(str, "Z") == 0)     //z
+		return JY901_data.gyro.z;
+
+	if (strcmp(str, "t") == 0 || strcmp(str, "T") == 0)     //温度
+		return JY901_data.gyro.temperature;
+}
+
+int16_t CJY901::getMagRaw(const char* str)
+{
+	if (_transferMode)
+		readRegisters(_address, JY_HX, 8, (int8_t *)&JY901_data.mag);
+
+	if (strcmp(str, "x") == 0 || strcmp(str, "X") == 0)     //x
+		return JY901_data.mag.x;
+
+	if (strcmp(str, "y") == 0 || strcmp(str, "Y") == 0)     //y
+		return JY901_data.mag.y;
+
+	if (strcmp(str, "z") == 0 || strcmp(str, "Z") == 0)     //z
+		return JY901_data.mag.z;
+
+	if (strcmp(str, "t") == 0 || strcmp(str, "T") == 0)     //温度
+		return JY901_data.mag.temperature;
+}
+
+unsigned long CJY901::getLastTime(void)
+{
+	return lastTime;
 }
 
 CJY901 JY901 = CJY901();

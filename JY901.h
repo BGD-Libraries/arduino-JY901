@@ -29,6 +29,10 @@ class CJY901
 	void     quitCali(void);                        //退出校准
 	void     caliIMU(void);                         //IMU校准
 	void     caliMag(void);                         //磁力计校准
+	int16_t  getAccRaw(const char* str);            //获取加速度计原始数据
+	int16_t  getGyroRaw(const char* str);           //获取陀螺仪原始数据
+	int16_t  getMagRaw(const char* str);            //获取磁力计原始数据
+	unsigned long getLastTime(void);
 	const uint8_t save_conf_cmd[5] = {0xFF,0xAA,0x00,0x00,0x00};
 	const uint8_t imu_cali_cmd[5]  = {0xFF,0xAA,0x01,0x01,0x00};
 	const uint8_t mag_cali_cmd[5]  = {0xFF,0xAA,0x01,0x02,0x01};
@@ -37,6 +41,7 @@ class CJY901
   private: 
 	uint8_t _address;
 	bool    _transferMode;
+	unsigned long lastTime;
 	uint8_t rxBuffer[12];
 	uint8_t rxCnt = 0;
 	void readRegisters(uint8_t deviceAddr,uint8_t addressToRead, uint8_t bytesToRead, int8_t * dest);
