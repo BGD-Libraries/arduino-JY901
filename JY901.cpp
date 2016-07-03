@@ -72,10 +72,11 @@ void CJY901::readRegisters(uint8_t deviceAddr, uint8_t addressToRead, uint8_t by
 
 	Wire.requestFrom(deviceAddr, bytesToRead); //Ask for bytes, once done, bus is released by default
 
-	while (Wire.available() < bytesToRead); //Hang out until we get the # of bytes we expect
-
-	for (int x = 0; x < bytesToRead; x++)
-		dest[x] = Wire.read();
+	if (Wire.available() >= bytesToRead) {//Hang out until we get the # of bytes we expect
+		for (int x = 0; x < bytesToRead; x++)
+			dest[x] = Wire.read();
+		lastTime = millis();
+	}
 }
 
 void CJY901::writeRegister(uint8_t deviceAddr, uint8_t addressToWrite, uint8_t bytesToRead, int8_t *dataToWrite)
