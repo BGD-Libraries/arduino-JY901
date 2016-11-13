@@ -1,14 +1,17 @@
 #include "JY901.h"
 #include "JY901_dfs.h"
-#include <Arduino.h>
 #include <string.h>
 #include <Wire.h>
-#include <stdint.h>
 
 CJY901::CJY901()
 {
 	address_ = 0x50;
 	transferMode_ = 0;
+}
+
+void CJY901::attach(Stream & Serial_temp)
+{
+	Serial_ = &Serial_temp;
 }
 
 void CJY901::startIIC(uint8_t address)
@@ -62,6 +65,50 @@ bool CJY901::copeSerialData(uint8_t data)
 	rxCnt = 0;
 	lastTime = millis();
 	return 1;
+}
+
+bool CJY901::receiveSerialData(void)
+{
+	bool status = false;
+	if (Serial_->available()) {
+		do {
+			if (Serial_->peek() != 0x55) {  //第一个字节是否为0x55,如果不是丢弃
+				Serial_->read();
+			} else {
+				if (Serial_->available() >= 11) {  //可接收数据是否达到要求
+					Serial_->readBytes(rxBuffer, 11); //读取数据
+					uint8_t sum = 0;
+					for (uint8_t cnt = 0; cnt<10; cnt++) {
+						sum += rxBuffer[cnt];
+					}
+					if (sum == rxBuffer[10]) {
+						switch (rxBuffer[1])
+						{
+							case 0x50:  memcpy(&JY901_data.time,    &rxBuffer[2], 8); break;    // 时间
+							case 0x51:  memcpy(&JY901_data.acc,     &rxBuffer[2], 8); break;    //加速度
+							case 0x52:  memcpy(&JY901_data.gyro,    &rxBuffer[2], 8); break;    //角速度
+							case 0x53:  memcpy(&JY901_data.angle,   &rxBuffer[2], 8); break;    //角度
+							case 0x54:  memcpy(&JY901_data.mag,     &rxBuffer[2], 8); break;    //磁场
+							case 0x55:  memcpy(&JY901_data.dStatus, &rxBuffer[2], 8); break;    //端口状态
+							case 0x56:  memcpy(&JY901_data.pressure,&rxBuffer[2], 4);           //气压
+							            memcpy(&JY901_data.altitude,&rxBuffer[6], 4);           //高度
+							            break;
+							case 0x57:  memcpy(&JY901_data.lon,     &rxBuffer[2], 4);           //经度
+							            memcpy(&JY901_data.lat,     &rxBuffer[6], 4);           //纬度
+							            break;
+							case 0x58:  memcpy(&JY901_data.GPSHeight,   &rxBuffer[2], 2);       //地速
+							            memcpy(&JY901_data.GPSYaw,      &rxBuffer[4], 2);
+							            memcpy(&JY901_data.GPSVelocity, &rxBuffer[6], 4);
+							            break;
+						}
+						status = true;
+						lastTime = millis();
+					}
+				}
+			}
+		}while(Serial_->available() >= 11);
+	}
+	return status;
 }
 
 void CJY901::readData(uint8_t address, uint8_t length, int8_t data[])

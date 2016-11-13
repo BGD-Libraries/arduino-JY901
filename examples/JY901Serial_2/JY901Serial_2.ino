@@ -1,18 +1,20 @@
 #include <JY901.h>
 /*
 Test on Uno R3.
-JY901    UnoR3
-SDA <---> SDA
-SCL <---> SCL
+JY901   UnoR3
+TX <---> 0(Rx)
 */
 void setup() 
 {
-	Serial.begin(115200);
-	JY901.startIIC();
-} 
+	Serial.begin(9600);
+	JY901.attach(Serial);
+}
 
 void loop() 
 {
+	JY901.receiveSerialData();
+
+
 	//print received data. Data was received in serialEvent;
 	Serial.print("Time:20");
 	Serial.print(JY901.getTime("year"));
@@ -60,7 +62,7 @@ void loop()
 	Serial.print(" ");
 	Serial.print(JY901.getYaw());
 	Serial.print("\n");
-	
+
 	Serial.print("Pressure:");
 	Serial.println(JY901.getPressure());
 	Serial.print("Altitude:");
@@ -105,7 +107,7 @@ void loop()
 	Serial.println("");
 
 	delay(500);
-}
 
+}
 
 

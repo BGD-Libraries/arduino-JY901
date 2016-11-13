@@ -1,14 +1,16 @@
 #ifndef JY901_h
 #define JY901_h
-#include <stdint.h>
+#include <Arduino.h>
+
 
 class CJY901 
 {
   public: 
-	
 	CJY901();                                       //构造函数
+	void     attach(Stream & Serial_temp);          //绑定串口
 	void     startIIC(uint8_t address = 0x50);      //设定0x50地址的IIC初始化
 	bool     copeSerialData(uint8_t data);          //处理接收的数据
+	bool     receiveSerialData(void);               //接收串口数据
 	void     readData(uint8_t address,              //address地址
 	                  uint8_t length,               //长度length
 	                   int8_t data[]);              //手动读取ucLength长度的数据
@@ -56,6 +58,7 @@ class CJY901
 	const uint8_t quit_cali_cmd[5] = {0xFF,0xAA,0x01,0x00,0x00};
 	
   private: 
+	Stream * Serial_;
 	uint8_t address_;
 	bool    transferMode_;
 	unsigned long lastTime;
