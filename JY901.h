@@ -1,19 +1,23 @@
-#ifndef JY901_h
-#define JY901_h
+#ifndef _JY901_H_
+#define _JY901_H_
 #include <Arduino.h>
 
+extern const uint8_t JY901_save_conf_cmd[5];
+extern const uint8_t JY901_imu_cali_cmd[5];
+extern const uint8_t JY901_mag_cali_cmd[5];
+extern const uint8_t JY901_quit_cali_cmd[5];
 
-class CJY901 
+class CJY901
 {
-  public: 
+  public:
 	CJY901();                                       //构造函数
 	void     attach(Stream & Serial_temp);          //绑定串口
 	void     startIIC(uint8_t address = 0x50);      //设定0x50地址的IIC初始化
-	bool     copeSerialData(uint8_t data);          //处理接收的数据
+	bool     readSerialData(uint8_t data);          //处理接收的数据
 	bool     receiveSerialData(void);               //接收串口数据
 	void     readData(uint8_t address,              //address地址
 	                  uint8_t length,               //长度length
-	                   int8_t data[]);              //手动读取ucLength长度的数据
+	                  uint8_t data[]);              //手动读取ucLength长度的数据
 	uint16_t getTime(const char*);                  //获取时间，'Y'年，'M'月，'D'天，'h'时，'m'分，'s'秒，'l'毫秒
 	double   getAccX();                             //获取加速度
 	double   getAccY();                             //获取加速度
@@ -52,23 +56,19 @@ class CJY901
 	void     caliIMU();                             //IMU校准
 	void     caliMag();                             //磁力计校准
 	unsigned long getLastTime();
-	const uint8_t save_conf_cmd[5] = {0xFF,0xAA,0x00,0x00,0x00};
-	const uint8_t imu_cali_cmd[5]  = {0xFF,0xAA,0x01,0x01,0x00};
-	const uint8_t mag_cali_cmd[5]  = {0xFF,0xAA,0x01,0x02,0x01};
-	const uint8_t quit_cali_cmd[5] = {0xFF,0xAA,0x01,0x00,0x00};
-	
-  private: 
-	Stream * Serial_;
-	uint8_t address_;
-	bool    transferMode_;
+
+  private:
+	Stream * Serial_ = NULL;
+	uint8_t address_ = 0x50;  //默认设备地址0x50
+	bool    transferMode_ = 0;
 	unsigned long lastTime;
-	uint8_t rxBuffer[12];
+	uint8_t rxBuffer[12]={0};
 	uint8_t rxCnt = 0;
-	void readRegisters(uint8_t deviceAddr,uint8_t addressToRead, uint8_t bytesToRead, int8_t * dest);
-	void writeRegister(uint8_t deviceAddr,uint8_t addressToWrite,uint8_t bytesToRead, int8_t *dataToWrite);
+	void readRegisters(uint8_t deviceAddr,uint8_t addressToRead, uint8_t bytesToRead, uint8_t * dest);
+	void writeRegister(uint8_t deviceAddr,uint8_t addressToWrite,uint8_t bytesToRead, uint8_t *dataToWrite);
 	struct
 	{
-		struct 
+		struct
 		{
 			uint8_t  year;
 			uint8_t  month;

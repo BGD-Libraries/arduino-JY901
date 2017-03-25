@@ -1,4 +1,3 @@
-#include <Wire.h>
 #include <JY901.h>
 /*
 Test on Uno R3.
@@ -8,14 +7,12 @@ TX <---> 0(Rx)
 void setup() 
 {
 	Serial.begin(9600);
-
+	JY901.attach(Serial);
 }
 
 void loop() 
 {
-	while (Serial.available()) {
-		JY901.copeSerialData(Serial.read());
-	}
+	JY901.receiveSerialData();
 
 
 	//print received data. Data was received in serialEvent;
